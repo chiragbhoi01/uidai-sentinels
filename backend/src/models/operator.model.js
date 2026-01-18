@@ -20,7 +20,8 @@ const operatorSchema = new Schema(
         },
         district: {
             type: String,
-            required: true
+            required: true,
+            index: true
         },
         state: {
             type: String,
@@ -30,7 +31,8 @@ const operatorSchema = new Schema(
             type: Number,
             min: 0,
             max: 100,
-            default: 0
+            default: 0,
+            index: true
         },
         status: {
             type: String,

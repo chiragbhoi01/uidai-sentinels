@@ -12,11 +12,13 @@ const transactionSchema = new Schema(
         operatorId: {
             type: Schema.Types.ObjectId,
             ref: "Operator",
-            required: true
+            required: true,
+            index: true
         },
         timestamp: {
             type: Date,
-            default: Date.now
+            default: Date.now,
+            index: true
         },
         type: {
             type: String,
@@ -30,7 +32,7 @@ const transactionSchema = new Schema(
         },
         anomalyType: {
             type: String,
-            enum: ['Velocity', 'Biometric', 'None'],
+            enum: ['None', 'Velocity', 'Biometric'],
             default: 'None'
         }
     },

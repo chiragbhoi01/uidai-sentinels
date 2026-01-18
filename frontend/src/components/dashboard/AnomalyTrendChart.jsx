@@ -29,8 +29,8 @@ const AnomalyTrendChart = ({ data }) => {
             variants={itemVariants}
             className="bg-white shadow-lg rounded-xl p-6"
         >
-            <h3 className="text-lg font-medium text-gray-900 mb-1">System Risk Trend</h3>
-            <p className="text-sm text-gray-500 mb-6">Daily average risk score and critical anomalies over the past week.</p>
+            <h3 className="text-lg font-medium text-gray-900 mb-1">System-Wide Anomaly & Risk Trend</h3>
+            <p className="text-sm text-gray-500 mb-6">Daily aggregated anomalies and average risk score over the last 14 days.</p>
             <div style={{ width: '100%', height: 400 }}>
                 <ResponsiveContainer>
                     <LineChart

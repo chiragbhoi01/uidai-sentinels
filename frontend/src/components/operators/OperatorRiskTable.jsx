@@ -85,14 +85,21 @@ const OperatorRiskTable = ({ operators, onRowClick }) => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {sortedOperators.map((operator, index) => (
+          {sortedOperators.map((operator, index) => {
+            const score = operator.riskScore;
+            let rowClass = "hover:bg-gray-50 transition-colors cursor-pointer";
+            if (score > 90) rowClass += " bg-red-50/50";
+            else if (score > 70) rowClass += " bg-orange-50/50";
+            else if (score > 40) rowClass += " bg-yellow-50/50";
+
+            return (
             <motion.tr
               key={operator._id}
               custom={index}
               variants={rowVariants}
               initial="hidden"
               animate="visible"
-              className="hover:bg-gray-50 transition-colors cursor-pointer"
+              className={rowClass}
               onClick={() => onRowClick(operator.operatorId)}
             >
               <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-700">{operator.operatorId}</td> 
@@ -102,7 +109,8 @@ const OperatorRiskTable = ({ operators, onRowClick }) => {
               <td className="px-6 py-4 whitespace-nowrap text-sm"><RiskBadge score={operator.riskScore} /></td>      
               <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-600">{formatDate(operator.updatedAt)}</td>
             </motion.tr>
-          ))}
+            );
+          })}
         </tbody>
       </table>
     </div>

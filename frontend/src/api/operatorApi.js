@@ -73,8 +73,10 @@ export const getDashboardSummary = async () => {
  * This is a placeholder; you might need a dedicated backend endpoint for this.
  */
 export const getAnomalyTrend = async () => {
-    // This function can be adapted once the backend provides a specific endpoint for trends.
-    // For now, it will likely not be used directly if the dashboard derives trends from other data.
-    console.warn("getAnomalyTrend is a placeholder and has no backend endpoint.");
-    return [];
+    try {
+        const response = await api.get('/risk/anomalies/trend');
+        return handleApiResponse(response);
+    } catch (error) {
+        handleApiError(error, 'fetching anomaly trend');
+    }
 };

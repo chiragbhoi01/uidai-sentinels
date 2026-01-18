@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom'; // Import Link
 import { Users, ShieldAlert, ShieldX, BarChart3, AlertTriangle } from 'lucide-react';
 
 import { getDashboardSummary, getAnomalyTrend } from '../api/operatorApi';
@@ -23,22 +24,11 @@ const Dashboard = () => {
         const fetchDashboardData = async () => {
             try {
                 setLoading(true);
-                // NOTE: In a real app, you might want separate API endpoints.
-                // For the hackathon, we can derive the trend from a different call or use a dedicated one.
-                // Assuming getDashboardSummary also returns what's needed for the trend for now.
-                const summaryData = await getDashboardSummary();
+                const [summaryData, trendData] = await Promise.all([
+                    getDashboardSummary(),
+                    getAnomalyTrend()
+                ]);
                 setSummary(summaryData);
-                // Mocking trend data based on summary as getAnomalyTrend might not exist on backend yet
-                const trendData = [
-                    { date: '2026-01-11', anomalies: summaryData.totalOperators - 20, riskLevel: 30 },
-                    { date: '2026-01-12', anomalies: summaryData.totalOperators - 15, riskLevel: 45 },
-                    { date: '2026-01-13', anomalies: summaryData.totalOperators - 18, riskLevel: 40 },
-                    { date: '2026-01-14', anomalies: summaryData.criticalOperators + 5, riskLevel: 60 },
-                    { date: '2026-01-15', anomalies: summaryData.criticalOperators + 12, riskLevel: 75 },
-                    { date: '2026-01-16', anomalies: summaryData.criticalOperators + 8, riskLevel: 65 },
-                    { date: '2026-01-17', anomalies: summaryData.criticalOperators, riskLevel: 80 },
-                ];
-
                 setTrend(trendData);
                 setError(null);
             } catch (err) {
@@ -72,17 +62,19 @@ const Dashboard = () => {
             >
                 {/* KPI Cards */}
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                    <StatCard
-                        icon={Users}
-                        title="Total Operators"
-                        value={summary?.totalOperators?.toLocaleString()}
-                        color="text-blue-500"
-                    />
+                    <Link to="/operators">
+                        <StatCard
+                            icon={Users}
+                            title="Total Operators"
+                            value={summary?.totalOperators?.toLocaleString()}
+                            color="text-blue-500"
+                        />
+                    </Link>
                     <StatCard
                         icon={ShieldAlert}
                         title="High-Risk Operators"
                         value={summary?.highRiskCount?.toLocaleString()}
-                        color="text-yellow-500"
+                        color="text-orange-500"
                     />
                     <StatCard
                         icon={ShieldX}
@@ -114,12 +106,23 @@ const Dashboard = () => {
         >
             <div className="max-w-7xl mx-auto">
                 <header className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900">
-                        Sentinel Dashboard
-                    </h1>
-                    <p className="text-sm text-gray-500">
-                        Real-time overview of operator risk and system-wide anomaly trends.
-                    </p>
+                    <div className="flex justify-between items-center">
+                        <div>
+                            <h1 className="text-3xl font-bold text-gray-900">
+                                Sentinel Dashboard
+                            </h1>
+                            <p className="text-sm text-gray-500">
+                                Real-time overview of operator risk and system-wide anomaly trends.
+                            </p>
+                        </div>
+                        {summary && (
+                             <div className={`text-sm font-semibold p-2 rounded-lg ${summary.criticalRiskCount > 0 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+                                {summary.criticalRiskCount > 0
+                                    ? `${summary.criticalRiskCount} Critical Alerts Detected`
+                                    : "System Operating Normally"}
+                            </div>
+                        )}
+                    </div>
                 </header>
                 <main>
                     {renderContent()}
@@ -129,4 +132,49 @@ const Dashboard = () => {
     );
 };
 
+const DashboardContent = ({ summary, trend }) => {
+    return (
+        <motion.div
+            className="space-y-8"
+            initial="hidden"
+            animate="visible"
+            variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
+        >
+            {/* KPI Cards */}
+                            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                                <Link to="/operators" className="hover:scale-105 transition-transform">
+                                    <StatCard
+                                        icon={Users}
+                                        title="Total Operators"
+                                        value={summary?.totalOperators?.toLocaleString()}
+                                        color="text-blue-500"
+                                    />
+                                </Link>
+                                <StatCard
+                                    icon={ShieldAlert}
+                                    title="High-Risk Operators"
+                                    value={summary?.highRiskCount?.toLocaleString()}
+                                    color="text-orange-500"
+                                />
+                                <StatCard
+                                    icon={ShieldX}
+                                    title="Critical Operators"
+                                    value={summary?.criticalRiskCount?.toLocaleString()}
+                                    color="text-red-500"
+                                />
+                                <StatCard
+                                    icon={BarChart3}
+                                    title="Avg. Risk Score"
+                                    value={summary?.averageRiskScore?.toFixed(1)}
+                                    color="text-indigo-500"
+                                />
+                            </div>
+            {/* Anomaly Trend Chart */}
+            <AnomalyTrendChart data={trend} />
+        </motion.div>
+    );
+};
+
 export default Dashboard;
+
+

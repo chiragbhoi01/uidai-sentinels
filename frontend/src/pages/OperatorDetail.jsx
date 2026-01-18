@@ -90,6 +90,20 @@ const OperatorDetail = () => {
                     </div>
                 </motion.div>
 
+                {/* Suggested Action Section */}
+                <motion.div variants={itemVariants} className="bg-white shadow-lg rounded-xl p-6 border-l-4 border-indigo-500">
+                    <h3 className="text-lg font-medium text-gray-900">Suggested Action</h3>
+                    <p className="mt-2 text-gray-700">
+                        {(() => {
+                            const score = details.riskScore;
+                            if (score > 90) return "Immediate suspension and field audit recommended.";
+                            if (score > 70) return "High priority for field verification and close monitoring.";
+                            if (score > 40) return "Place on watchlist for periodic review.";
+                            return "Continue standard monitoring. No immediate action required.";
+                        })()}
+                    </p>
+                </motion.div>
+
                 {/* Risk Score Breakdown */}
                 {details.riskFactors && (
                     <motion.div variants={itemVariants}>
@@ -104,10 +118,10 @@ const OperatorDetail = () => {
                     <OperatorMetricsRadar operatorMetrics={details.metrics} districtAverage={details.districtAverages} />
                 </motion.div>
 
-                {/* Anomaly Flags */}
+                {/* Anomaly Flags (Risk Reasoning) */}
                 <motion.div variants={itemVariants} className="bg-white shadow-lg rounded-xl">
                     <div className="px-6 py-4 border-b">
-                        <h2 className="text-lg font-medium text-gray-900">Anomaly Flags Detected</h2>
+                        <h2 className="text-lg font-medium text-gray-900">Why is this operator flagged?</h2>
                         <p className="text-sm text-gray-500">System-identified behavioral patterns indicating potential risk.</p>
                     </div>
                     <ul className="divide-y divide-gray-200">
@@ -122,7 +136,7 @@ const OperatorDetail = () => {
                                 </div>
                             </li>
                         )) : (
-                            <li className="px-6 py-4 text-sm text-gray-500">No specific anomaly flags detected.</li>
+                            <li className="px-6 py-4 text-sm text-gray-500">No abnormal patterns detected.</li>
                         )}
                     </ul>
                 </motion.div>

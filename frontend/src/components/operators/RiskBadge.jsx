@@ -2,18 +2,18 @@ import React from 'react';
 
 const getRiskInfo = (score) => {
     if (score > 90) {
-      return { level: 'CRITICAL', classes: 'bg-red-100 text-red-800' };
+      return { level: 'CRITICAL', classes: 'bg-red-100 text-red-700 font-bold' };
     }
     if (score > 70) {
-      return { level: 'HIGH', classes: 'bg-orange-100 text-orange-800' };
+      return { level: 'HIGH', classes: 'bg-orange-100 text-orange-700 font-bold' };
     }
     if (score > 40) {
-      return { level: 'MEDIUM', classes: 'bg-yellow-100 text-yellow-800' };
+      return { level: 'MEDIUM', classes: 'bg-yellow-100 text-yellow-700 font-semibold' };
     }
     if (score > 0) {
-        return { level: 'LOW', classes: 'bg-green-100 text-green-800' };
+        return { level: 'LOW', classes: 'bg-green-100 text-green-700 font-semibold' };
     }
-    return { level: 'NOMINAL', classes: 'bg-gray-100 text-gray-800' };
+    return { level: 'NOMINAL', classes: 'bg-gray-100 text-gray-700' };
 };
 
 const RiskBadge = ({ score }) => {

@@ -7,6 +7,8 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
+    "seed": "node src/db/seed.js",
+    "update-risk": "node src/jobs/updateRiskScores.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -28,6 +30,7 @@
     "mongoose-aggregate-paginate-v2": "^1.0.7"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.2.0",
     "nodemon": "^3.1.0",
     "prettier": "^3.2.5"
   }
