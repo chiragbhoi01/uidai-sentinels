@@ -21,4 +21,22 @@ yarn-debug.log*
 yarn-error.log*
 .idea
 
+# Gemini-specific
 /UI
+
+# Monorepo specific ignores
+# Ignore node_modules in subdirectories
+/backend/node_modules
+/frontend/node_modules
+
+# Ignore .env files in subdirectories
+/backend/.env
+/frontend/.env
+
+# Ignore build artifacts in frontend
+/frontend/dist
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
